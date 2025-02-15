@@ -5,8 +5,14 @@ project(GraphicEngineOpenGL)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Include the headers directory so you can use #include <...>
+# Include the headers directory so we can use #include <...>
 include_directories(include)
 
-# Define the executable target using the gathered sources
-add_executable(GraphicEngineOpenGL src/main.cpp)
+# Gather all source files .cpp in the src directory
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+
+# add all source files and the glad.c file to the executable
+add_executable(GraphicEngineOpenGL ${SOURCES} src/glad.c)
+
+# Link libraries
+target_link_libraries(GraphicEngineOpenGL ${CMAKE_SOURCE_DIR}/lib/glfw3.lib)
