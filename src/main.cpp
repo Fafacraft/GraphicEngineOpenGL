@@ -26,11 +26,19 @@ int main() {
 
 	// our triangle vertices
 	GLfloat vertices[] = {
-		-0.5f, -0.5f * float(sqrt(3) / 3), 0.0f,
-		0.5f, -0.5f * float(sqrt(3) / 3), 0.0f,
-		0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f
+		-0.5f, -0.5f * float(sqrt(3) / 3), 0.0f, // bottom left
+		0.5f, -0.5f * float(sqrt(3) / 3), 0.0f, // bottom right
+		0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f, // top
+		-0.5f / 2, 0.5f * float(sqrt(3) / 6), 0.0f, // inner bottom left
+		0.5f / 2, 0.5f * float(sqrt(3) / 6), 0.0f, // inner bottom right
+		0.0f, -0.5f * float(sqrt(3) / 3), 0.0f // inner top
 	};
 
+	GLuint indices[] = {
+		0, 3, 5, // lower left triangle
+		3, 2, 4, // lower right triangle
+		5, 4, 1 // top triangle
+	};
 
 	GLFWwindow* window = glfwCreateWindow(800, 800, "FirstWindow", NULL, NULL);
 	if (window == NULL) {
@@ -69,16 +77,21 @@ int main() {
 
 
 	// create a vertex array object (VAO) to store the vertex attribute configurations, and a vertex buffer object (VBO) to store the actual vertex data
-	GLuint VAO, VBO;
+	GLuint VAO, VBO, EBO;
 	// generate the VAO and VBO with one object each
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
 	// make the VAO the active object
 	glBindVertexArray(VAO);
 	// bind the VBO and tell OpenGL we want to use it as an array buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// copy the vertices into the buffer object's memory
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// tell OpenGL how to interpret the vertex data
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -88,7 +101,7 @@ int main() {
 	// unbind the VAO and VBO, to prevent accidental changes to the VAO and VBO
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 
 
@@ -104,7 +117,7 @@ int main() {
 		// bind the VAO to tell OpenGL we want to use it
 		glBindVertexArray(VAO);
 		// draw the triangle using GL_TRIANGLES primitive
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
 		// swap the buffers to show the new frame
 		glfwSwapBuffers(window);
@@ -117,6 +130,7 @@ int main() {
 	// ---- END ----
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	glfwDestroyWindow(window);
