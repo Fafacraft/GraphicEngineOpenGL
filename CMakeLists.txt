@@ -16,3 +16,10 @@ add_executable(GraphicEngineOpenGL ${SOURCES} src/glad.c)
 
 # Link libraries
 target_link_libraries(GraphicEngineOpenGL ${CMAKE_SOURCE_DIR}/lib/glfw3.lib)
+
+# Copy resources to the build directory
+add_custom_command(TARGET GraphicEngineOpenGL POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/ressources
+        ${CMAKE_BINARY_DIR}/ressources
+)
