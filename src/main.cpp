@@ -19,12 +19,13 @@ int main() {
 
 	// our triangle vertices
 	GLfloat vertices[] = {
-		-0.5f, -0.5f * float(sqrt(3) / 3), 0.0f, // bottom left
-		0.5f, -0.5f * float(sqrt(3) / 3), 0.0f, // bottom right
-		0.0f, 0.5f * float(sqrt(3) * 2 / 3), 0.0f, // top
-		-0.5f / 2, 0.5f * float(sqrt(3) / 6), 0.0f, // inner bottom left
-		0.5f / 2, 0.5f * float(sqrt(3) / 6), 0.0f, // inner bottom right
-		0.0f, -0.5f * float(sqrt(3) / 3), 0.0f // inner top
+		//						position				// color
+		-0.5f, -0.5f * float(sqrt(3) / 3),	0.0f,	0.8f, 0.3f, 0.02f, // bottom left
+		0.5f, -0.5f * float(sqrt(3) / 3),	0.0f,	0.8f, 0.3f, 0.02f, // bottom right
+		0.0f, 0.5f * float(sqrt(3) * 2 / 3),0.0f,	1.0f, 0.6f, 0.32f, // top
+		-0.25f, 0.5f * float(sqrt(3) / 6),	0.0f,	0.9f, 0.45f, 0.17f, // inner bottom left
+		0.25f, 0.5f * float(sqrt(3) / 6),	0.0f,	0.9f, 0.45f, 0.17f, // inner bottom right
+		0.0f, -0.5f * float(sqrt(3) / 3),	0.0f,	0.8f, 0.3f, 0.02f // inner top
 	};
 
 	GLuint indices[] = {
@@ -64,7 +65,8 @@ int main() {
 	EBO EBO1(indices, sizeof(indices));
 
 	// we link the VBO to the VAO.
-	VAO1.LinkAttrib(VBO1, 0);
+	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
+	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	// unbind the VAO, VBO, and EBO from the OpenGL context to avoid accidental changes to them
 	VAO1.Unbind();
 	VBO1.Unbind();
