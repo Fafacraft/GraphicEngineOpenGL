@@ -64,7 +64,7 @@ int main() {
 	VBO VBO1(vertices, sizeof(vertices));
 	EBO EBO1(indices, sizeof(indices));
 
-	// we link the VBO to the VAO.
+	// first link is the position of the vertices, second link is the color of the vertices (layout 0 and 1)
 	VAO1.LinkAttrib(VBO1, 0, 3, GL_FLOAT, 6 * sizeof(float), (void*)0);
 	VAO1.LinkAttrib(VBO1, 1, 3, GL_FLOAT, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	// unbind the VAO, VBO, and EBO from the OpenGL context to avoid accidental changes to them
@@ -72,6 +72,9 @@ int main() {
 	VBO1.Unbind();
 	EBO1.Unbind();
 
+
+	// get the location of the uniform variable in the shader program
+	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 
 
 
@@ -83,6 +86,9 @@ int main() {
 
 		// tell OpenGL which shader program we want to use
 		shaderProgram.Activate();
+		// only after activating the shader program, we can set the uniform variable
+		glUniform1f(uniID, 0.5);
+
 		// bind the VAO to tell OpenGL we want to use this VAO to draw the vertices
 		VAO1.Bind();
 		// draw the triangle using GL_TRIANGLES primitive
