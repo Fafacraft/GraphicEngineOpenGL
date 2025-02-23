@@ -80,4 +80,5 @@ void Shader::compileErrors(unsigned int shader, const char* type)
 			glGetProgramInfoLog(shader, 1024, NULL, infolog);
 			std::cout << "PROGRAM_LINKING_ERROR for: " << type << "\n" << infolog << std::endl;
 		}
+	}
 }
