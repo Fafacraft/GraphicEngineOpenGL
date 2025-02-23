@@ -12,7 +12,7 @@ include_directories(include)
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # add all source files and the glad.c file to the executable
-add_executable(GraphicEngineOpenGL ${SOURCES} src/glad.c)
+add_executable(GraphicEngineOpenGL ${SOURCES} src/glad.c "src/texture.cpp")
 
 # Link libraries
 target_link_libraries(GraphicEngineOpenGL ${CMAKE_SOURCE_DIR}/lib/glfw3.lib)
